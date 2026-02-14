@@ -6,40 +6,54 @@ app.use(express.json());
 const PORT = process.env.PORT || 3000;
 
 /* ======================
-   SAMPLE DATA
+   IN-MEMORY DATABASE
 ====================== */
 
-const friends = [
-  { id: "alex", empathy: 90, energy: 60 },
-  { id: "sam", empathy: 70, energy: 95 }
-];
+let users = [];
 
 /* ======================
    HOME ROUTE
 ====================== */
 
 app.get("/", (req, res) => {
-  res.send("✅ Cosmic Personality backend is running");
+  res.send("🌌 Cosmic Personality backend is running");
 });
 
 /* ======================
-   RANK ROUTE
+   CREATE USER
 ====================== */
 
-app.post("/rank", (req, res) => {
-  const { category } = req.body;
+app.post("/users", (req, res) => {
+  const {
+    name,
+    mbti,
+    enneagram,
+    zodiac,
+    empathy,
+    energy
+  } = req.body;
 
-  if (category === "emotional_support") {
-    const ranked = [...friends].sort((a, b) => b.empathy - a.empathy);
-    return res.json(ranked);
-  }
+  const newUser = {
+    id: Date.now().toString(),
+    name,
+    mbti,
+    enneagram,
+    zodiac,
+    empathy,
+    energy
+  };
 
-  if (category === "concerts") {
-    const ranked = [...friends].sort((a, b) => b.energy - a.energy);
-    return res.json(ranked);
-  }
+  users.push(newUser);
 
-  res.json({ error: "Unknown category" });
+  res.json(newUser);
+});
+
+/* ======================
+   GET ALL USERS
+====================== */
+
+app.get("/users", (req, res) => {
+  res.json(users);
 });
 
 /* ======================
@@ -49,3 +63,4 @@ app.post("/rank", (req, res) => {
 app.listen(PORT, () => {
   console.log("Server running on port " + PORT);
 });
+
