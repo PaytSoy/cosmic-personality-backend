@@ -28,9 +28,12 @@ app.post("/users", (req, res) => {
     name,
     mbti,
     enneagram,
-    zodiac,
-    empathy,
-    energy
+    sunSign,
+    moonSign,
+    risingSign,
+    interests,
+    astrologyInfluence,
+    visibility
   } = req.body;
 
   const newUser = {
@@ -38,9 +41,20 @@ app.post("/users", (req, res) => {
     name,
     mbti,
     enneagram,
-    zodiac,
-    empathy,
-    energy
+    sunSign,
+    moonSign,
+    risingSign,
+    interests: interests || [],
+    astrologyInfluence:
+      astrologyInfluence !== undefined ? astrologyInfluence : 30,
+    visibility: visibility || {
+      mbti: true,
+      enneagram: true,
+      sun: true,
+      moon: true,
+      rising: true
+    },
+    createdAt: new Date().toISOString()
   };
 
   users.push(newUser);
@@ -63,4 +77,3 @@ app.get("/users", (req, res) => {
 app.listen(PORT, () => {
   console.log("Server running on port " + PORT);
 });
-
